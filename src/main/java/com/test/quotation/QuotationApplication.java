@@ -11,30 +11,10 @@ public class QuotationApplication {
     }
 
 //    @Bean
-//    CommandLineRunner commandLineRunner(CustomerRepository repository) {
+//    CommandLineRunner commandLineRunner(QuotationRepository repository) {
 //        return args -> {
-//
-//            LocalDate localDate = LocalDate.of(2000, 10, 01);
-//            Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-//            repository.save(
-//                    new Customer(0L,
-//                            "John",
-//                            "Manning",
-//                            "",
-//                            "j.man@test.com",
-//                            "8-123-654-987-879",
-//                            date
-//                    ));
-//            repository.save(
-//                    new Customer(0L,
-//                            "Peter",
-//                            "Manning",
-//                            "",
-//                            "p.man@test.com",
-//                            "8-654-222-923-879",
-//                            date
-//                    ));
-//
+//            Optional<Quotation> quotation = repository.findById(1L);
+//            quotation.ifPresent(System.out::println);
 //        };
 //    }
 }

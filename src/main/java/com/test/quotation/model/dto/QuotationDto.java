@@ -6,13 +6,11 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import java.util.Date;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public record CustomerDto(
+public record QuotationDto(
         Long id,
-        String firstName,
-        String lastName,
-        String middleName,
-        String email,
-        String phoneNumber,
-        Date birthDate
+        Date beginningOfInsurance,
+        Integer insuredAmount,
+        Date dateOfSigningMortgage,
+        CustomerDto customer
 ) {
 }

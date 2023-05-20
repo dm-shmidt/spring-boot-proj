@@ -9,17 +9,17 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper()
+@Mapper
 public interface CustomerMapper {
 
     CustomerMapper INSTANCE = Mappers.getMapper(CustomerMapper.class);
 
-    Customer mapToCustomer(CustomerDto customerDto);
+    Customer toEntity(CustomerDto customerDto);
 
     @Named("toCustomerDto")
-    CustomerDto mapToCustomerDto(Customer customer);
+    CustomerDto toDto(Customer customer);
 
     @IterableMapping(qualifiedByName = "toCustomerDto")
-    List<CustomerDto> toCustomerDtoList(List<Customer> customerList);
+    List<CustomerDto> toDtoList(List<Customer> customerList);
 
 }

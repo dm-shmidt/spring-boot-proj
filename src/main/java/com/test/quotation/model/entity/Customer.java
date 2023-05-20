@@ -5,21 +5,19 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Past;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.FieldNameConstants;
+import lombok.*;
 
 import java.util.Date;
 
 @Data
+@EqualsAndHashCode(exclude = "quotation")
+@ToString(exclude = "quotation")
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "customer")
 public class Customer {
 
-    @FieldNameConstants.Exclude
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
@@ -48,4 +46,8 @@ public class Customer {
     @Temporal(TemporalType.DATE)
     @Past(message = "Birth date should be past date.")
     private Date birthDate;
+
+    @OneToOne(mappedBy = "customer")
+    @Transient
+    private Quotation quotation;
 }

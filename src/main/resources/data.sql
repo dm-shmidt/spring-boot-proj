@@ -19,3 +19,7 @@ values ('1998-04-07', 'korky.lazer@good.com', 'Kork', 'Lazerwood', 'fon', '9-234
 insert into "customer" ("birth_date", "email", "firstname", "lastname", "middlename", "phone_number", "id")
 values ('2010-03-09', 'j.ingerman@good.com', 'James', 'Ingerman', '', '8-755-492-472', 7);
 
+
+
+insert into "quotation" ("beginning_of_insurance", "date_of_signing_mortgage", "insured_amount", "id", "customer_id")
+values ('2010-01-20', '2010-01-11', 1000, 1, 1);
