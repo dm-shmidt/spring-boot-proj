@@ -20,4 +20,8 @@ public class SubscriptionService {
         return mapper.toDto(subscriptionRepository.findById(id)
                 .orElseThrow(NoSuchElementException::new));
     }
+
+    public SubscriptionDto addSubscription(SubscriptionDto subscriptionDto) {
+        return mapper.toDto(subscriptionRepository.save(mapper.toEntity(subscriptionDto)));
+    }
 }

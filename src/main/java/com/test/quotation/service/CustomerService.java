@@ -10,13 +10,17 @@ import java.util.List;
 @Service
 public class CustomerService {
     private final CustomerRepository customerRepository;
-    private final CustomerMapper customerMapper = CustomerMapper.INSTANCE;
+    private final CustomerMapper mapper = CustomerMapper.INSTANCE;
 
     public CustomerService(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
     }
 
     public List<CustomerDto> getAllCustomers() {
-        return customerMapper.toDtoList(customerRepository.findAll());
+        return mapper.toDtoList(customerRepository.findAll());
+    }
+
+    public CustomerDto addCustomer(CustomerDto customerDto) {
+        return mapper.toDto(customerRepository.save(mapper.toEntity(customerDto)));
     }
 }

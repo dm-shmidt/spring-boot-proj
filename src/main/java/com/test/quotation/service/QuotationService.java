@@ -26,4 +26,8 @@ public class QuotationService {
         return mapper.toDto(quotationRepository.findById(id)
                 .orElseThrow(NoSuchElementException::new));
     }
+
+    public QuotationDto addQuotation(QuotationDto quotationDto) {
+        return mapper.toDto(quotationRepository.save(mapper.toEntity(quotationDto)));
+    }
 }

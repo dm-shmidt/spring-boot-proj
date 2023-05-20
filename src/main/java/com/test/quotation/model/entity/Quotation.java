@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.util.Date;
 
@@ -24,7 +25,8 @@ import java.util.Date;
 public class Quotation {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "quotation_seq")
+    @GenericGenerator(name = "quotation_seq", strategy="increment")
     @Column(name = "id")
     private Long id;
 

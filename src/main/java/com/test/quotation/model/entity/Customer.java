@@ -1,11 +1,11 @@
 package com.test.quotation.model.entity;
 
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.util.Date;
 
@@ -19,20 +19,21 @@ import java.util.Date;
 public class Customer {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "customer_seq")
+    @GenericGenerator(name = "customer_seq", strategy="increment")
+    @Column(name = "id", unique = true)
     Long id;
 
     @Column(name = "firstname")
-    @NotBlank(message = "Firstname should not be empty.")
+    @NotNull(message = "Firstname should not be null.")
     private String firstName;
 
     @Column(name = "lastname")
-    @NotBlank(message = "Lastname should not be empty.")
+    @NotNull(message = "Lastname should not be null.")
     private String lastName;
 
     @Column(name = "middlename")
-    @Nullable
+    @NotNull(message = "Middle name should not be null.")
     private String middleName;
 
     @Column(name = "email")
