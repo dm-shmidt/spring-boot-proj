@@ -3,7 +3,6 @@ package com.test.quotation.model.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Past;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -30,7 +29,6 @@ public class Quotation {
     private Long id;
 
     @Temporal(TemporalType.DATE)
-    @Past(message = "BeginningOfInsurance date should be past date.")
     @Column(name = "beginning_of_insurance")
     private Date beginningOfInsurance;
 
@@ -40,11 +38,14 @@ public class Quotation {
     private Integer insuredAmount;
 
     @Temporal(TemporalType.DATE)
-    @Past(message = "Signing mortgage date should be past date.")
     @Column(name = "date_of_signing_mortgage")
     private Date dateOfSigningMortgage;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer customer;
+
+    @OneToOne(mappedBy = "quotation")
+    @Transient
+    private Subscription subscription;
 }
