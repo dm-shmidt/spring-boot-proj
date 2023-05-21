@@ -6,9 +6,11 @@ import com.test.quotation.model.dto.SubscriptionDto;
 import com.test.quotation.service.CustomerService;
 import com.test.quotation.service.QuotationService;
 import com.test.quotation.service.SubscriptionService;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -26,36 +28,41 @@ public class AppController {
 
     @GetMapping("customer")
     public ResponseEntity<Object> getAllCustomers() {
-        return ResponseEntity.ok().body(Optional.ofNullable(customerService.getAllCustomers()));
+        return ResponseEntity.ok(Optional.ofNullable(customerService.getAllCustomers()));
     }
 
     @PostMapping("customer")
     public ResponseEntity<Object> addCustomer(@RequestBody CustomerDto customerDto) {
-        return ResponseEntity.ok().body(customerService.addCustomer(customerDto));
+        return ResponseEntity.ok(customerService.addCustomer(customerDto));
+    }
+
+    @RequestMapping(value = "customer/{id}", method = RequestMethod.PATCH, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updateCustomer(@RequestBody Map<String, Object> updates, @PathVariable("id") Long id) {
+        return ResponseEntity.ok(customerService.update(updates, id));
     }
 
     @GetMapping("quotation")
     public ResponseEntity<Object> getAllQuotations() {
-        return ResponseEntity.ok().body(Optional.ofNullable(quotationService.getAllQuotations()));
+        return ResponseEntity.ok(Optional.ofNullable(quotationService.getAllQuotations()));
     }
 
     @GetMapping("quotation/{id}")
     public ResponseEntity<Object> getQuotationById(@PathVariable Long id) {
-        return ResponseEntity.ok().body(Optional.ofNullable(quotationService.getQuotationById(id)));
+        return ResponseEntity.ok(Optional.ofNullable(quotationService.getQuotationById(id)));
     }
 
     @PostMapping("quotation")
     public ResponseEntity<Object> addOrUpdateExistingQuotation(@RequestBody QuotationDto quotationDto) {
-        return ResponseEntity.ok().body(quotationService.addQuotation(quotationDto));
+        return ResponseEntity.ok(quotationService.addQuotation(quotationDto));
     }
 
     @GetMapping("subscription/{id}")
     public ResponseEntity<Object> getSubscription(@PathVariable Long id) {
-        return ResponseEntity.ok().body(Optional.ofNullable(subscriptionService.getSubscriptionById(id)));
+        return ResponseEntity.ok(Optional.ofNullable(subscriptionService.getSubscriptionById(id)));
     }
 
     @PostMapping("subscription")
     public ResponseEntity<Object> addOrUpdateExistingSubscription(@RequestBody SubscriptionDto subscriptionDto) {
-        return ResponseEntity.ok().body(subscriptionService.addSubscription(subscriptionDto));
+        return ResponseEntity.ok(subscriptionService.addSubscription(subscriptionDto));
     }
 }
