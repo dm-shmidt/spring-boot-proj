@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
@@ -28,11 +28,11 @@ public class Subscription {
 
     @Temporal(TemporalType.DATE)
     @Column(name = "start_date")
-    private Date startDate;
+    private LocalDate startDate;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "valid_until")
-    private Date validUntil;
+    private LocalDate validUntil;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "quotation_id", referencedColumnName = "id")

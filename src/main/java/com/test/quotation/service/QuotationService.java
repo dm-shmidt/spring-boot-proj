@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 @Service
 public class QuotationService {
@@ -30,7 +29,7 @@ public class QuotationService {
 
     public QuotationDto getQuotationById(Long id) {
         return mapper.toDto(quotationRepository.findById(id)
-                .orElseThrow(NoSuchElementException::new));
+                .orElseThrow(() -> new NotFoundException("Quotation wiht id " + id + " not found.")));
     }
 
     public QuotationDto addQuotation(QuotationDto quotationDto) {
@@ -43,10 +42,7 @@ public class QuotationService {
 
         propsMapper.updateValues(updates, quotationFromDB);
 
-        quotationRepository.save(quotationFromDB);
-
-        return mapper.toDto(quotationRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("DB error. Quotation with id " + id + " not found.")));
+        return mapper.toDto(quotationRepository.save(quotationFromDB));
 
     }
 }

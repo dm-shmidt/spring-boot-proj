@@ -9,7 +9,6 @@ import com.test.quotation.util.PropsMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 @Service
 public class SubscriptionService {
@@ -23,7 +22,7 @@ public class SubscriptionService {
 
     public SubscriptionDto getSubscriptionById(Long id) {
         return mapper.toDto(subscriptionRepository.findById(id)
-                .orElseThrow(NoSuchElementException::new));
+                .orElseThrow(() -> new NotFoundException("Subscription with id " + id + " not found.")));
     }
 
     public SubscriptionDto addSubscription(SubscriptionDto subscriptionDto) {
@@ -36,10 +35,7 @@ public class SubscriptionService {
 
         propsMapper.updateValues(updates, subscriptionFromDB);
 
-        subscriptionRepository.save(subscriptionFromDB);
-
-        return mapper.toDto(subscriptionRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("DB error. Subscription with id " + id + " not found.")));
+        return mapper.toDto(subscriptionRepository.save(subscriptionFromDB));
 
     }
 }

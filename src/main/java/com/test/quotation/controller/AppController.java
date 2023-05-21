@@ -31,6 +31,11 @@ public class AppController {
         return ResponseEntity.ok(Optional.ofNullable(customerService.getAllCustomers()));
     }
 
+    @GetMapping("customer/{id}")
+    public ResponseEntity<Object> getCustomerById(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(customerService.getCustomerById(id));
+    }
+
     @PostMapping("customer")
     public ResponseEntity<Object> addCustomer(@RequestBody CustomerDto customerDto) {
         return ResponseEntity.ok(customerService.addCustomer(customerDto));

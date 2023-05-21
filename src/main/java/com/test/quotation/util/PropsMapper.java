@@ -5,9 +5,8 @@ import com.test.quotation.exception.UpdateFailedException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -62,8 +61,8 @@ public class PropsMapper<T> {
     }
 
     private Object setValue(Class<?> type, Object value) throws ParseException {
-        if (type == Date.class) {
-            return new SimpleDateFormat("yyyy-MM-dd").parse(value.toString());
+        if (type == LocalDate.class) {
+            return LocalDate.parse(value.toString());
         }
         return value;
     }

@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 @EqualsAndHashCode(exclude = "customer")
@@ -32,7 +32,7 @@ public class Quotation {
 
     @Temporal(TemporalType.DATE)
     @Column(name = "beginning_of_insurance")
-    private Date beginningOfInsurance;
+    private LocalDate beginningOfInsurance;
 
     @Min(value = 1)
     @Max(value = Integer.MAX_VALUE)
@@ -41,7 +41,7 @@ public class Quotation {
 
     @Temporal(TemporalType.DATE)
     @Column(name = "date_of_signing_mortgage")
-    private Date dateOfSigningMortgage;
+    private LocalDate dateOfSigningMortgage;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "customer_id", referencedColumnName = "id")

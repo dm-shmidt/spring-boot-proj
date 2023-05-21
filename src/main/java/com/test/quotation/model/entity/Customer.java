@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Past;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 @EqualsAndHashCode(exclude = "quotation")
@@ -46,7 +46,7 @@ public class Customer {
     @Column(name = "birth_date")
     @Temporal(TemporalType.DATE)
     @Past(message = "Birth date should be past date.")
-    private Date birthDate;
+    private LocalDate birthDate;
 
     @OneToOne(mappedBy = "customer")
     @Transient
