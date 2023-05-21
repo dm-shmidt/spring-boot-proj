@@ -1,12 +1,17 @@
 package com.test.quotation.util;
 
 import com.test.quotation.exception.UpdateFailedException;
+import org.hibernate.type.descriptor.java.ObjectJavaType;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class PropsMapper<T> {
     /**
@@ -21,17 +26,22 @@ public class PropsMapper<T> {
 
         Class<?> targetClass = target.getClass();
 
-        List<String> fields = Arrays.stream(targetClass.getDeclaredFields())
-                .map(Field::getName).filter(f -> !f.equalsIgnoreCase("id")).toList();
+        Map<String, String> fields = Arrays.stream(targetClass.getDeclaredFields())
+                .collect(Collectors.toMap(Field::getName, field -> field.getType().getName()));
 
         map.forEach((key, value) -> {
             String fieldName = toCamel(key);
-            if (fields.contains(fieldName)) {
+            if (fields.containsKey(fieldName)) {
                 String setterMethodName = "set" + Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1);
                 try {
-                    targetClass.getDeclaredMethod(setterMethodName, value.getClass()).invoke(target, value);
+                    Class<?> setterArgumentType = Class.forName(fields.get(fieldName));
+
+                    targetClass.getDeclaredMethod(setterMethodName, setterArgumentType)
+                            .invoke(target, setValue(setterArgumentType, value));
                 } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-                    throw new UpdateFailedException("Failed to invoke method " + setterMethodName + "(" + value.getClass() + ") on " + targetClass.getName());
+                    throw new UpdateFailedException("Failed to invoke method " + setterMethodName + "(" + value.getClass().getName() + ") on " + targetClass.getName());
+                } catch (ClassNotFoundException | ParseException e) {
+                    throw new RuntimeException(e);
                 }
             }
         });
@@ -50,5 +60,12 @@ public class PropsMapper<T> {
             builder.append(c);
         }
         return builder.toString();
+    }
+
+    private Object setValue(Class<?> type, Object value) throws ParseException {
+        if (type == Date.class) {
+            return new SimpleDateFormat("yyyy-MM-dd").parse(value.toString());
+        }
+        return value;
     }
 }

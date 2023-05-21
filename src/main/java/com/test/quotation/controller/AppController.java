@@ -56,6 +56,12 @@ public class AppController {
         return ResponseEntity.ok(quotationService.addQuotation(quotationDto));
     }
 
+    @RequestMapping(value = "quotation/{id}", method = RequestMethod.PATCH, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updateQuotation(@RequestBody Map<String, Object> updates, @PathVariable("id") Long id) {
+        return ResponseEntity.ok(quotationService.update(updates, id));
+    }
+
+
     @GetMapping("subscription/{id}")
     public ResponseEntity<Object> getSubscription(@PathVariable Long id) {
         return ResponseEntity.ok(Optional.ofNullable(subscriptionService.getSubscriptionById(id)));
