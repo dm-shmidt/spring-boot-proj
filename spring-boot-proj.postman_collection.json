@@ -1,0 +1,250 @@
+{
+	"info": {
+		"_postman_id": "6ea8b4b2-4499-4a6e-840a-6b72c9f5013f",
+		"name": "spring-boot-proj",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18084234"
+	},
+	"item": [
+		{
+			"name": "Get all customers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/customer",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"customer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Customer by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/customer/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"customer",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Quotation by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/quotation/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"quotation",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Subscription by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/subscription/2",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"subscription",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add customer",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"first_name\": \"Sally\",\r\n    \"last_name\": \"Trueman\",\r\n    \"middle_name\": \"\",\r\n    \"email\": \"b.trueman@good.com\",\r\n    \"phone_number\": \"8-987-234-123\",\r\n    \"birth_date\": \"2000-08-09\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/customer",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"customer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add quotation",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"beginning_of_insurance\": \"2000-01-01\",\r\n    \"insured_amount\": 2000,\r\n    \"date_of_signing_mortgage\": \"2000-11-20\",\r\n    \"customer\": {\r\n        \"first_name\": \"Larry\",\r\n        \"last_name\": \"King\",\r\n        \"middle_name\": \"\",\r\n        \"email\": \"l.king@good.com\",\r\n        \"phone_number\": \"8-234-456-547\",\r\n        \"birth_date\": \"1990-11-01\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/quotation",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"quotation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add subscription",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"start_date\": \"2003-11-21\",\r\n    \"valid_until\": \"2029-01-11\",\r\n    \"quotation\": {\r\n        \"beginning_of_insurance\": \"2010-10-17\",\r\n        \"insured_amount\": 2000,\r\n        \"date_of_signing_mortgage\": \"2004-09-14\",\r\n        \"customer\": {\r\n            \"first_name\": \"Larry\",\r\n            \"last_name\": \"King\",\r\n            \"middle_name\": \"\",\r\n            \"email\": \"l.king@good.com\",\r\n            \"phone_number\": \"8-234-456-547\",\r\n            \"birth_date\": \"1990-11-01\"\r\n        }\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/subscription",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"subscription"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Patch customer",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"first_name\": \"Billy\",\r\n    \"middle_name\": \"\",\r\n    \"last_name\": \"Wittacker\",\r\n    \"email\": \"b.wittacker@good.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/customer/8",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"customer",
+						"8"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Patch quotation",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"beginning_of_insurance\": \"2020-01-01\",\r\n    \"insured_amount\": 33330,\r\n    \"date_of_signing_mortgage\": \"2010-01-10\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/quotation/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"quotation",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Patch subscription",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"start_date\": \"2023-11-20\",\r\n    \"valid_until\": \"2029-11-19\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/subscription/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"subscription",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
