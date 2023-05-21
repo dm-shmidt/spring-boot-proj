@@ -71,4 +71,10 @@ public class AppController {
     public ResponseEntity<Object> addOrUpdateExistingSubscription(@RequestBody SubscriptionDto subscriptionDto) {
         return ResponseEntity.ok(subscriptionService.addSubscription(subscriptionDto));
     }
+
+    @RequestMapping(value = "subscription/{id}", method = RequestMethod.PATCH, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updateSubscription(@RequestBody Map<String, Object> updates, @PathVariable("id") Long id) {
+        return ResponseEntity.ok(subscriptionService.update(updates, id));
+    }
+
 }

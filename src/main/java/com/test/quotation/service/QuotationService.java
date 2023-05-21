@@ -3,7 +3,6 @@ package com.test.quotation.service;
 import com.test.quotation.exception.NotFoundException;
 import com.test.quotation.mapper.QuotationMapper;
 import com.test.quotation.model.dto.QuotationDto;
-import com.test.quotation.model.entity.Customer;
 import com.test.quotation.model.entity.Quotation;
 import com.test.quotation.repository.QuotationRepository;
 import com.test.quotation.util.PropsMapper;

@@ -1,7 +1,6 @@
 package com.test.quotation.util;
 
 import com.test.quotation.exception.UpdateFailedException;
-import org.hibernate.type.descriptor.java.ObjectJavaType;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -9,7 +8,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -38,10 +36,11 @@ public class PropsMapper<T> {
 
                     targetClass.getDeclaredMethod(setterMethodName, setterArgumentType)
                             .invoke(target, setValue(setterArgumentType, value));
+
                 } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
                     throw new UpdateFailedException("Failed to invoke method " + setterMethodName + "(" + value.getClass().getName() + ") on " + targetClass.getName());
                 } catch (ClassNotFoundException | ParseException e) {
-                    throw new RuntimeException(e);
+                    throw new UpdateFailedException("Failed to get value of " + value.toString());
                 }
             }
         });
