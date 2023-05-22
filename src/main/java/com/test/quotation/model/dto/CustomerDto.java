@@ -4,25 +4,32 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDate;
 
+@Data
+@EqualsAndHashCode(callSuper = false)
+@AllArgsConstructor
+@NoArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public record CustomerDto(
+public class CustomerDto extends BaseDto {
         @JsonProperty("id")
-        Long id,
+        private Long id;
         @JsonProperty("first_name")
-        String firstName,
+        private String firstName;
         @JsonProperty("last_name")
-        String lastName,
+        private String lastName;
         @JsonProperty("middle_name")
-        String middleName,
+        private String middleName;
         @JsonProperty("email")
-        String email,
+        private String email;
         @JsonProperty("phone_number")
-        String phoneNumber,
+        private String phoneNumber;
         @JsonProperty("birth_date")
         @JsonFormat(pattern = "yyyy-MM-dd")
-        Date birthDate
-) {
+        private LocalDate birthDate;
 }

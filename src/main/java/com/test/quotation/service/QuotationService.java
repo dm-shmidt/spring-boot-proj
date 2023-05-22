@@ -1,13 +1,15 @@
 package com.test.quotation.service;
 
+import com.test.quotation.config.Patcher;
 import com.test.quotation.exception.NotFoundException;
+import com.test.quotation.exception.UpdateFailedException;
 import com.test.quotation.mapper.QuotationMapper;
 import com.test.quotation.model.dto.QuotationDto;
 import com.test.quotation.model.entity.Quotation;
 import com.test.quotation.repository.QuotationRepository;
-import com.test.quotation.util.PropsMapper;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
@@ -17,10 +19,11 @@ public class QuotationService {
 
     private final QuotationMapper mapper = QuotationMapper.INSTANCE;
 
-    private final PropsMapper<Quotation> propsMapper = new PropsMapper<>();
+    private final Patcher patcher;
 
-    public QuotationService(QuotationRepository quotationRepository) {
+    public QuotationService(QuotationRepository quotationRepository, Patcher patcher) {
         this.quotationRepository = quotationRepository;
+        this.patcher = patcher;
     }
 
     public List<QuotationDto> getAllQuotations() {
@@ -40,9 +43,15 @@ public class QuotationService {
         Quotation quotationFromDB = quotationRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Quotation with id " + id + " not found."));
 
-        propsMapper.updateValues(updates, quotationFromDB);
+        QuotationDto quotationDto = mapper.toDto(quotationFromDB);
+        try {
+            quotationDto = (QuotationDto) patcher.patch(updates, quotationDto);
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            throw new UpdateFailedException("Patch failed.");
+        }
+
+        quotationFromDB = mapper.toEntity(quotationDto);
 
         return mapper.toDto(quotationRepository.save(quotationFromDB));
-
     }
 }
