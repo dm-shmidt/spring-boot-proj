@@ -1,14 +1,13 @@
 package com.test.quotation.service;
 
-import com.test.quotation.exception.RecordWithFKAlreadyExistsException;
-import com.test.quotation.model.entity.Customer;
-import com.test.quotation.util.Patcher;
 import com.test.quotation.exception.NotFoundException;
 import com.test.quotation.exception.UpdateFailedException;
 import com.test.quotation.mapper.QuotationMapper;
 import com.test.quotation.model.dto.QuotationDto;
+import com.test.quotation.model.entity.Customer;
 import com.test.quotation.model.entity.Quotation;
 import com.test.quotation.repository.QuotationRepository;
+import com.test.quotation.util.Patcher;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InvocationTargetException;
@@ -60,11 +59,6 @@ public class QuotationService {
     }
 
     public QuotationDto attachCustomer(Long quotationId, Customer customer) {
-
-        if (!quotationRepository.findAllByCustomerId(customer.getId()).isEmpty()) {
-            throw new RecordWithFKAlreadyExistsException(
-                    "Quotation with customerId " + customer.getId() + " as a foreign key already exists.");
-        }
 
         Quotation quotation = quotationRepository.findById(quotationId)
                 .orElseThrow(() -> new NotFoundException("Quotation with id " + quotationId + " not found."));
