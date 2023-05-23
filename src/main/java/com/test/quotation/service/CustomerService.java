@@ -26,7 +26,7 @@ public class CustomerService {
         return mapper.toDtoList(customerRepository.findAll());
     }
 
-    public CustomerDto getCustomerById(Long id) {
+    public CustomerDto getCustomerDtoById(Long id) {
         return mapper.toDto(customerRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Customer with id " + id + " not found.")));
     }
@@ -42,5 +42,10 @@ public class CustomerService {
         propsMapper.updateValues(updates, customerFromDB);
 
         return mapper.toDto(customerRepository.save(customerFromDB));
+    }
+
+    public Customer getCustomerById(Long id) {
+        return customerRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Failed to find customer with id " + id + " not found."));
     }
 }

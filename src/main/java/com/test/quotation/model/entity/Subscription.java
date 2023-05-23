@@ -34,7 +34,7 @@ public class Subscription {
     @Column(name = "valid_until")
     private LocalDate validUntil;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "quotation_id", referencedColumnName = "id")
     private Quotation quotation;
 }

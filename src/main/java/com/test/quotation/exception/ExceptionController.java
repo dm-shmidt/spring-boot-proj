@@ -12,7 +12,7 @@ import java.util.Map;
 
 @ControllerAdvice
 public class ExceptionController {
-    @ExceptionHandler({NotFoundException.class, UpdateFailedException.class})
+    @ExceptionHandler({NotFoundException.class, UpdateFailedException.class, RecordWithFKAlreadyExistsException.class})
     public ResponseEntity<Object> handleNotFoundAndUpdateFailedExceptions(Exception ex, WebRequest request) {
         return new ResponseEntity<Object>(
                 Map.of("error", ex.getMessage(),

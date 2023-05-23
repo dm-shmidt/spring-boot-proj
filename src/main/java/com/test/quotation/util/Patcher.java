@@ -1,10 +1,9 @@
-package com.test.quotation.config;
+package com.test.quotation.util;
 
 import com.test.quotation.model.dto.BaseDto;
 import com.test.quotation.model.dto.CustomerDto;
 import com.test.quotation.model.dto.QuotationDto;
 import com.test.quotation.model.dto.SubscriptionDto;
-import com.test.quotation.util.PropsMapper;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -41,7 +40,10 @@ public class Patcher {
                         .toLowerCase();
                 String keyInUpdateMap = childDtoPureClassName
                         .substring(0, childDtoPureClassName.lastIndexOf("dto"));
-                patch((Map<String, Object>) map.get(keyInUpdateMap), childDto);
+                Map<String, Object> childUpdateMap = (Map<String, Object>) map.get(keyInUpdateMap);
+                if (childUpdateMap != null && !childUpdateMap.isEmpty()) {
+                    patch(childUpdateMap, childDto);
+                }
             }
         }
         return target;

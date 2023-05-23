@@ -43,7 +43,7 @@ public class Quotation {
     @Column(name = "date_of_signing_mortgage")
     private LocalDate dateOfSigningMortgage;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer customer;
 
