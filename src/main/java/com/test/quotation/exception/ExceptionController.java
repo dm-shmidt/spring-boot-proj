@@ -8,16 +8,11 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
-import java.time.Instant;
-import java.util.Map;
-
 @ControllerAdvice
 public class ExceptionController {
     @ExceptionHandler({NotFoundException.class, UpdateFailedException.class, RecordWithFKAlreadyExistsException.class})
     public ResponseEntity<Object> handleNotFoundAndUpdateFailedExceptions(Exception ex, WebRequest request) {
-        return new ResponseEntity<Object>(
-                Map.of("error", ex.getMessage(),
-                        "timestamp", Instant.now()),
+        return new ResponseEntity<>(new ExceptionResponse(ex.getMessage()),
                 new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
 
@@ -25,15 +20,17 @@ public class ExceptionController {
     public ResponseEntity<Object> handleDataIntegrityViolationException(Exception ex, WebRequest request) {
         if (ex.getMessage().contains("PUBLIC.") && ex.getMessage().contains("_FK")) {
             String message = "Violation of " + ex.getMessage().split("PUBLIC\\.")[1].split("_FK")[0] + ": only unique values are allowed.";
-            return ResponseEntity.accepted().body(
-                    Map.of("error", message,
-                            "timestamp", Instant.now())
-            );
+            return new ResponseEntity<>(new ExceptionResponse(message),
+                    new HttpHeaders(), HttpStatus.CONFLICT);
         }
-        return ResponseEntity.accepted().body(
-                Map.of("error", "Data integrity violation exception.",
-                        "timestamp", Instant.now())
+        return new ResponseEntity<>(new ExceptionResponse("Data integrity violation exception."),
+                new HttpHeaders(), HttpStatus.CONFLICT);
+    }
 
-        );
+    @ExceptionHandler(java.time.DateTimeException.class)
+    public ResponseEntity<Object> handleDateTimeException(Exception ex, WebRequest request) {
+        return new ResponseEntity<>(new ExceptionResponse(ex.getMessage()),
+                new HttpHeaders(), HttpStatus.CONFLICT);
+
     }
 }

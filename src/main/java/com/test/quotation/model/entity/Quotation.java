@@ -1,5 +1,6 @@
 package com.test.quotation.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -49,5 +50,6 @@ public class Quotation {
 
     @OneToOne(mappedBy = "quotation")
     @Transient
+    @JsonIgnore
     private Subscription subscription;
 }

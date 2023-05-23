@@ -5,7 +5,7 @@ import com.test.quotation.mapper.CustomerMapper;
 import com.test.quotation.model.dto.CustomerDto;
 import com.test.quotation.model.entity.Customer;
 import com.test.quotation.repository.CustomerRepository;
-import com.test.quotation.util.PropsMapper;
+import com.test.quotation.util.EntityPatcher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,7 +16,8 @@ public class CustomerService {
     private final CustomerRepository customerRepository;
     private final CustomerMapper mapper = CustomerMapper.INSTANCE;
 
-    private final PropsMapper<Customer> propsMapper = new PropsMapper<>();
+    //    private final PropsMapper<Customer> propsMapper = new PropsMapper<>();
+    private final EntityPatcher<Customer> entityPatcher = new EntityPatcher<>();
 
     public CustomerService(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
@@ -39,7 +40,7 @@ public class CustomerService {
         Customer customerFromDB = customerRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Customer with id " + id + " not found."));
 
-        propsMapper.updateValues(updates, customerFromDB);
+        customerFromDB = entityPatcher.patch(updates, customerFromDB);
 
         return mapper.toDto(customerRepository.save(customerFromDB));
     }

@@ -59,12 +59,8 @@ public class AppController {
     }
 
     @PostMapping("quotation")
-    public ResponseEntity<Object> addOrUpdateExistingQuotation(@RequestBody QuotationDto quotationDto) {
+    public ResponseEntity<Object> addQuotation(@RequestBody QuotationDto quotationDto) {
         QuotationDto newQuotationDto = quotationService.addQuotation(quotationDto);
-        CustomerDto customerDto = newQuotationDto.getCustomer();
-        if (customerDto != null) {
-            newQuotationDto.setCustomer(customerService.getCustomerDtoById(customerDto.getId()));
-        }
         return ResponseEntity.ok(newQuotationDto);
     }
 
@@ -77,7 +73,7 @@ public class AppController {
     public ResponseEntity<?> attachCustomerToQuotation(@RequestBody AttachRequestDto attachRequestDto) {
         QuotationDto quotationDto = quotationService.getQuotationDtoById(attachRequestDto.getParentId());
 
-        if (quotationDto.getCustomer() != null) {
+        if (quotationDto.customer() != null) {
             return ResponseEntity.accepted().body(
                     Map.of("error", "Cannot be attached.",
                             "message", "Quotation with id "
@@ -94,7 +90,7 @@ public class AppController {
     }
 
     @PostMapping("subscription")
-    public ResponseEntity<Object> addOrUpdateExistingSubscription(@RequestBody SubscriptionDto subscriptionDto) {
+    public ResponseEntity<Object> addSubscription(@RequestBody SubscriptionDto subscriptionDto) {
         return ResponseEntity.ok(subscriptionService.addSubscription(subscriptionDto));
     }
 
@@ -107,7 +103,7 @@ public class AppController {
     public ResponseEntity<?> attachQuotationToSubscription(@RequestBody AttachRequestDto attachRequestDto) {
         SubscriptionDto subscriptionDto = subscriptionService.getSubscriptionById(attachRequestDto.getParentId());
 
-        if (subscriptionDto.getQuotation() != null) {
+        if (subscriptionDto.quotation() != null) {
             return ResponseEntity.accepted().body(
                     Map.of("error", "Cannot be attached.",
                             "message", "Subscription with id "

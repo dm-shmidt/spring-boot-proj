@@ -1,16 +1,14 @@
 package com.test.quotation.service;
 
 import com.test.quotation.exception.NotFoundException;
-import com.test.quotation.exception.UpdateFailedException;
 import com.test.quotation.mapper.QuotationMapper;
 import com.test.quotation.model.dto.QuotationDto;
 import com.test.quotation.model.entity.Customer;
 import com.test.quotation.model.entity.Quotation;
 import com.test.quotation.repository.QuotationRepository;
-import com.test.quotation.util.Patcher;
+import com.test.quotation.util.EntityPatcher;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
@@ -20,11 +18,11 @@ public class QuotationService {
 
     private final QuotationMapper mapper = QuotationMapper.INSTANCE;
 
-    private final Patcher patcher;
+    //    private final Patcher patcher;
+    private final EntityPatcher<Quotation> entityPatcher = new EntityPatcher<>();
 
-    public QuotationService(QuotationRepository quotationRepository, Patcher patcher) {
+    public QuotationService(QuotationRepository quotationRepository) {
         this.quotationRepository = quotationRepository;
-        this.patcher = patcher;
     }
 
     public List<QuotationDto> getAllQuotations() {
@@ -46,14 +44,7 @@ public class QuotationService {
         Quotation quotationFromDB = quotationRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Quotation with id " + id + " not found."));
 
-        QuotationDto quotationDto = mapper.toDto(quotationFromDB);
-        try {
-            quotationDto = (QuotationDto) patcher.patch(updates, quotationDto);
-        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new UpdateFailedException("Patch failed.");
-        }
-
-        quotationFromDB = mapper.toEntity(quotationDto);
+        quotationFromDB = entityPatcher.patch(updates, quotationFromDB);
 
         return mapper.toDto(quotationRepository.save(quotationFromDB));
     }
