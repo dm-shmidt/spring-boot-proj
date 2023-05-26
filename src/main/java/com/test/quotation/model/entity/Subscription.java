@@ -19,7 +19,7 @@ import java.time.LocalDate;
         uniqueConstraints = {
                 @UniqueConstraint(name = "quotation_id_fk", columnNames = "quotation_id")
         })
-public class Subscription {
+public class Subscription implements BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "subscription_seq")
     @GenericGenerator(name = "subscription_seq", strategy="increment")

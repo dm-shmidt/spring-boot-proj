@@ -1,12 +1,12 @@
-package com.test.quotation.exception;
+package com.test.quotation.exception.errorresponses;
 
 import java.time.Instant;
 
 public record ExceptionResponse(
         Instant timestamp,
-        String error
+        Object error
 ) {
-    public ExceptionResponse(String errorMessage) {
+    public ExceptionResponse(Object errorMessage) {
         this(Instant.now(), errorMessage);
     }
 }

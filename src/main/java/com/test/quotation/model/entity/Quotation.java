@@ -23,7 +23,7 @@ import java.time.LocalDate;
                 @UniqueConstraint(name = "customer_id_fk", columnNames = "customer_id")
         }
 )
-public class Quotation {
+public class Quotation implements BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "quotation_seq")

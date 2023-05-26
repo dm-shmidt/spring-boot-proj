@@ -3,7 +3,7 @@ package com.test.quotation.util;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.test.quotation.exception.UpdateFailedException;
+import com.test.quotation.model.dto.BaseRecord;
 
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -17,21 +17,23 @@ public class EntityPatcher<T> {
         objectMapper.registerModule(new JavaTimeModule());
     }
 
-    public T patch(Map<String, Object> patchMapWithSnakeCaseKeys, T entity) {
-        if (patchMapWithSnakeCaseKeys.isEmpty()) {
-            throw new UpdateFailedException("Update fields failed. Input map is empty.");
-        }
-
+    public T patch(BaseRecord updatesEntity, T entity) {
         TypeReference<Map<String, Object>> mapType = new TypeReference<>() {};
         Map<String, Object> entityMap = objectMapper.convertValue(entity, mapType);
-        patchMaps(patchMapWithSnakeCaseKeys, entityMap);
+
+        Map<String, Object> updatesMap = objectMapper.convertValue(updatesEntity, mapType);
+
+        patchMaps(updatesMap, entityMap);
+
         return objectMapper.convertValue(entityMap, (Class<T>) entity.getClass());
     }
 
-    private void patchMaps(Map<String, Object> inputMapWithSnakeCaseKeys, Map<String, Object> entityMap) {
+    private void patchMaps(Map<String, Object> updatesMap, Map<String, Object> entityMap) {
         // Convert keys of the input map to the camelCase format
-        Map<String, Object> inputMap = inputMapWithSnakeCaseKeys.entrySet().stream()
-                .collect(Collectors.toMap(entry -> toCamel(entry.getKey()), Map.Entry::getValue));
+        Map<String, Object> inputMap = updatesMap.entrySet()
+                .stream()
+                .filter(item -> item.getValue() != null)
+                .collect(Collectors.toMap(item -> toCamel(item.getKey()), Map.Entry::getValue));
 
         for (Map.Entry<String, Object> inputEntry: inputMap.entrySet()) {
             String key = inputEntry.getKey();
@@ -42,7 +44,7 @@ public class EntityPatcher<T> {
                         && !((Map<?, ?>) patchVal).isEmpty()) {
                     patchMaps((Map<String, Object>) patchVal, (Map<String, Object>) entityVal);
                 } else {
-                    if (patchVal != null && !(patchVal.equals(entityVal)) ) {
+                    if (!(patchVal instanceof Map<?, ?>) && patchVal != null && !(patchVal.equals(entityVal)) ) {
                         entityMap.put(key, patchVal);
                     }
                 }

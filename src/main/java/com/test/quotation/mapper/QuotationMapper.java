@@ -10,15 +10,17 @@ import org.mapstruct.factory.Mappers;
 import java.util.List;
 
 @Mapper(uses = {CustomerMapper.class})
-public interface QuotationMapper {
+public interface QuotationMapper extends BaseMapper<Quotation, QuotationDto> {
     QuotationMapper INSTANCE = Mappers.getMapper(QuotationMapper.class);
 
+    @Override
     @Named("toQuotationDto")
     QuotationDto toDto(Quotation quotation);
 
+    @Override
     Quotation toEntity(QuotationDto quotationDto);
 
+    @Override
     @IterableMapping(qualifiedByName = "toQuotationDto")
-    List<QuotationDto> toQuotationDtoList(List<Quotation> quotations);
-
+    List<QuotationDto> toDtoList(List<Quotation> quotations);
 }

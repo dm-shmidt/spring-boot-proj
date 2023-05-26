@@ -10,10 +10,11 @@ import org.mapstruct.factory.Mappers;
 import java.util.List;
 
 @Mapper
-public interface CustomerMapper {
+public interface CustomerMapper extends BaseMapper<Customer, CustomerDto> {
 
     CustomerMapper INSTANCE = Mappers.getMapper(CustomerMapper.class);
 
+    @Override
     Customer toEntity(CustomerDto customerDto);
 
     @Named("toCustomerDto")

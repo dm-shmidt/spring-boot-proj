@@ -1,10 +1,9 @@
 package com.test.quotation.repository;
 
 import com.test.quotation.model.entity.Customer;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.test.quotation.repository.base.CustomJpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CustomerRepository extends JpaRepository<Customer, Long> {
-
+public interface CustomerRepository extends CustomJpaRepository<Customer, Long> {
 }

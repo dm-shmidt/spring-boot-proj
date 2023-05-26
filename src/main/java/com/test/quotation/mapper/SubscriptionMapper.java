@@ -6,11 +6,13 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(uses = {QuotationMapper.class})
-public interface SubscriptionMapper {
+public interface SubscriptionMapper extends BaseMapper<Subscription, SubscriptionDto> {
 
     SubscriptionMapper INSTANCE = Mappers.getMapper(SubscriptionMapper.class);
 
+    @Override
     SubscriptionDto toDto(Subscription subscription);
 
+    @Override
     Subscription toEntity(SubscriptionDto subscriptionDto);
 }

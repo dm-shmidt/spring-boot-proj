@@ -1,12 +1,16 @@
 package com.test.quotation.controller;
 
-import com.test.quotation.model.dto.AttachRequestDto;
 import com.test.quotation.model.dto.CustomerDto;
 import com.test.quotation.model.dto.QuotationDto;
 import com.test.quotation.model.dto.SubscriptionDto;
-import com.test.quotation.service.CustomerService;
-import com.test.quotation.service.QuotationService;
-import com.test.quotation.service.SubscriptionService;
+import com.test.quotation.model.entity.Customer;
+import com.test.quotation.model.entity.Quotation;
+import com.test.quotation.model.entity.Subscription;
+import com.test.quotation.model.request.AttachRequest;
+import com.test.quotation.model.request.IdRequest;
+import com.test.quotation.service.BaseService;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -18,60 +22,63 @@ import java.util.Optional;
 @Transactional
 public class AppController {
 
-    private final CustomerService customerService;
-    private final QuotationService quotationService;
-    private final SubscriptionService subscriptionService;
+    private final BaseService<Customer, CustomerDto> customerService;
+    private final BaseService<Quotation, QuotationDto> quotationService;
+    private final BaseService<Subscription, SubscriptionDto> subscriptionService;
+//    private final SubscriptionService1 subscriptionService1;
 
-    public AppController(CustomerService customerService, QuotationService quotationService, SubscriptionService subscriptionService) {
+    public AppController(@Qualifier("customerService") BaseService<Customer, CustomerDto> customerService,
+                         @Qualifier("quotationService") BaseService<Quotation, QuotationDto> quotationService,
+                         @Qualifier("subscriptionService") BaseService<Subscription, SubscriptionDto> subscriptionService) {
         this.customerService = customerService;
         this.quotationService = quotationService;
         this.subscriptionService = subscriptionService;
     }
 
     @GetMapping("customer")
-    public ResponseEntity<Object> getAllCustomers() {
-        return ResponseEntity.ok(Optional.ofNullable(customerService.getAllCustomers()));
+    public ResponseEntity<?> getAllCustomers() {
+        return ResponseEntity.ok(Optional.ofNullable(customerService.getAll()));
     }
 
-    @GetMapping("customer/{id}")
-    public ResponseEntity<Object> getCustomerById(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(customerService.getCustomerDtoById(id));
+    @GetMapping("customer/id")
+    public ResponseEntity<?> getCustomerById(@RequestBody @Valid IdRequest request) {
+        return ResponseEntity.ok(customerService.getDtoById(request.id()));
     }
 
     @PostMapping("customer")
-    public ResponseEntity<Object> addCustomer(@RequestBody CustomerDto customerDto) {
-        return ResponseEntity.ok(customerService.addCustomer(customerDto));
+    public ResponseEntity<?> addCustomer(@RequestBody @Valid CustomerDto customerDto) {
+        return ResponseEntity.ok(customerService.add(customerDto));
     }
 
-    @PatchMapping(value = "customer/{id}")
-    public ResponseEntity<?> updateCustomer(@RequestBody Map<String, Object> updates, @PathVariable("id") Long id) {
-        return ResponseEntity.ok(customerService.update(updates, id));
+    @PatchMapping(value = "customer")
+    public ResponseEntity<?> updateCustomer(@RequestBody CustomerDto customerDtoUpdates) {
+        return ResponseEntity.ok(customerService.update(customerDtoUpdates));
     }
 
     @GetMapping("quotation")
     public ResponseEntity<Object> getAllQuotations() {
-        return ResponseEntity.ok(Optional.ofNullable(quotationService.getAllQuotations()));
+        return ResponseEntity.ok(Optional.ofNullable(quotationService.getAll()));
     }
 
-    @GetMapping("quotation/{id}")
-    public ResponseEntity<Object> getQuotationById(@PathVariable Long id) {
-        return ResponseEntity.ok(Optional.ofNullable(quotationService.getQuotationDtoById(id)));
+    @GetMapping("quotation/id")
+    public ResponseEntity<Object> getQuotationById(@RequestBody IdRequest request) {
+        return ResponseEntity.ok(Optional.ofNullable(quotationService.getDtoById(request.id())));
     }
 
     @PostMapping("quotation")
     public ResponseEntity<Object> addQuotation(@RequestBody QuotationDto quotationDto) {
-        QuotationDto newQuotationDto = quotationService.addQuotation(quotationDto);
+        QuotationDto newQuotationDto = quotationService.add(quotationDto);
         return ResponseEntity.ok(newQuotationDto);
     }
 
-    @PatchMapping(value = "quotation/{id}")
-    public ResponseEntity<?> updateQuotation(@RequestBody Map<String, Object> updates, @PathVariable("id") Long id) {
-        return ResponseEntity.ok(quotationService.update(updates, id));
+    @PatchMapping(value = "quotation")
+    public ResponseEntity<?> updateQuotation(@RequestBody QuotationDto updates) {
+        return ResponseEntity.ok(quotationService.update(updates));
     }
 
     @PutMapping("quotation/attach_customer")
-    public ResponseEntity<?> attachCustomerToQuotation(@RequestBody AttachRequestDto attachRequestDto) {
-        QuotationDto quotationDto = quotationService.getQuotationDtoById(attachRequestDto.getParentId());
+    public ResponseEntity<?> attachCustomerToQuotation(@RequestBody AttachRequest attachRequestDto) {
+        QuotationDto quotationDto = quotationService.getDtoById(attachRequestDto.getParentId());
 
         if (quotationDto.customer() != null) {
             return ResponseEntity.accepted().body(
@@ -80,37 +87,37 @@ public class AppController {
                             + attachRequestDto.getParentId() + " already owns customer with id " + attachRequestDto.getChildId()));
         }
 
-        return ResponseEntity.ok(quotationService.attachCustomer(attachRequestDto.getParentId(),
-                customerService.getCustomerById(attachRequestDto.getChildId())));
+        return ResponseEntity.ok(quotationService.attachChild(attachRequestDto.getParentId(),
+                customerService.getEntityById(attachRequestDto.getChildId())));
     }
 
-    @GetMapping("subscription/{id}")
-    public ResponseEntity<Object> getSubscription(@PathVariable Long id) {
-        return ResponseEntity.ok(Optional.ofNullable(subscriptionService.getSubscriptionById(id)));
+    @GetMapping("subscription/id")
+    public ResponseEntity<Object> getSubscription(@RequestBody IdRequest request) {
+        return ResponseEntity.ok(Optional.ofNullable(subscriptionService.getDtoById(request.id())));
     }
 
     @PostMapping("subscription")
     public ResponseEntity<Object> addSubscription(@RequestBody SubscriptionDto subscriptionDto) {
-        return ResponseEntity.ok(subscriptionService.addSubscription(subscriptionDto));
+        return ResponseEntity.ok(subscriptionService.add(subscriptionDto));
     }
 
-    @PatchMapping(value = "subscription/{id}")
-    public ResponseEntity<?> updateSubscription(@RequestBody Map<String, Object> updates, @PathVariable("id") Long id) {
-        return ResponseEntity.ok(subscriptionService.update(updates, id));
+    @PatchMapping(value = "subscription")
+    public ResponseEntity<?> updateSubscription(@RequestBody SubscriptionDto updates) {
+        return ResponseEntity.ok(subscriptionService.update(updates));
     }
 
     @PutMapping("subscription/attach_quotation")
-    public ResponseEntity<?> attachQuotationToSubscription(@RequestBody AttachRequestDto attachRequestDto) {
-        SubscriptionDto subscriptionDto = subscriptionService.getSubscriptionById(attachRequestDto.getParentId());
+    public ResponseEntity<?> attachQuotationToSubscription(@RequestBody AttachRequest attachRequest) {
+        SubscriptionDto subscriptionDto = subscriptionService.getDtoById(attachRequest.getParentId());
 
         if (subscriptionDto.quotation() != null) {
             return ResponseEntity.accepted().body(
                     Map.of("error", "Cannot be attached.",
                             "message", "Subscription with id "
-                                    + attachRequestDto.getParentId() + " already owns quotation with id " + attachRequestDto.getChildId()));
+                                    + attachRequest.getParentId() + " already owns quotation with id " + attachRequest.getChildId()));
         }
 
-        return ResponseEntity.ok(subscriptionService.attachQuotation(attachRequestDto.getParentId(),
-                quotationService.getQuotationById(attachRequestDto.getChildId())));
+        return ResponseEntity.ok(subscriptionService.attachChild(attachRequest.getParentId(),
+                quotationService.getEntityById(attachRequest.getChildId())));
     }
 }

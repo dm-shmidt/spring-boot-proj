@@ -24,5 +24,5 @@ public record CustomerDto(
         @JsonProperty("birth_date")
         @JsonFormat(pattern = "yyyy-MM-dd")
         LocalDate birthDate
-) {
+) implements BaseRecord {
 }

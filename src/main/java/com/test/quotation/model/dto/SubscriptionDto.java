@@ -20,5 +20,5 @@ public record SubscriptionDto(
         LocalDate validUntil,
         @JsonProperty("quotation")
         QuotationDto quotation
-) {
+) implements BaseRecord {
 }

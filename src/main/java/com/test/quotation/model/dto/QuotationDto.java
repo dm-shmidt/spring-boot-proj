@@ -21,5 +21,5 @@ public record QuotationDto(
         LocalDate dateOfSigningMortgage,
         @JsonProperty("customer")
         CustomerDto customer
-) {
+) implements BaseRecord {
 }

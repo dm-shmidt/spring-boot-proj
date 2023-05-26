@@ -1,4 +1,4 @@
-package com.test.quotation.model.dto;
+package com.test.quotation.model.request;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class AttachRequestDto {
+public class AttachRequest {
         private Long parentId;
         private Long childId;
 }

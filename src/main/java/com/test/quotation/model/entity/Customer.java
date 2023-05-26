@@ -17,7 +17,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Entity
 @Table(name = "customer")
-public class Customer {
+public class Customer implements BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "customer_seq")
