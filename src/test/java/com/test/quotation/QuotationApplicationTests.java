@@ -1,7 +1,11 @@
 package com.test.quotation;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.test.quotation.model.dto.SubscriptionDto;
+import com.test.quotation.model.request.IdRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -20,12 +24,14 @@ class QuotationApplicationTests {
 
 	@Autowired
 	private MockMvc mockMvc;
-	private final ObjectMapper objectMapper = new ObjectMapper();
+	private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
 	@Test
 	void getSubscriptionAndCheckNestedObjects() throws Exception {
-		String uri = "/subscription/1";
-		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(uri).accept(MediaType.APPLICATION_JSON_VALUE))
+		String uri = "/subscription/id";
+		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(uri)
+						.contentType(MediaType.APPLICATION_JSON_VALUE)
+						.content(idRequest(1L)))
 				.andExpect(status().isOk())
 				.andReturn();
 
@@ -35,5 +41,10 @@ class QuotationApplicationTests {
 		assertEquals(1L, subscriptionDto.id());
 		assertEquals(1L, subscriptionDto.quotation().id());
 		assertEquals(1L, subscriptionDto.quotation().customer().id());
+	}
+
+	private String idRequest(Long id) throws JsonProcessingException {
+		ObjectWriter writer = objectMapper.writer().withDefaultPrettyPrinter();
+		return writer.writeValueAsString(new IdRequest(id));
 	}
 }
