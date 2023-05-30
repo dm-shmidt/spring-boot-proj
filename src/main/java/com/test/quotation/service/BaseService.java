@@ -11,9 +11,9 @@ import com.test.quotation.util.EntityPatcher;
 import java.util.List;
 
 public abstract class BaseService<E extends BaseEntity, D extends BaseRecord> {
-    private final CustomJpaRepository<E, Long> repository;
-    private final BaseMapper<E, D> mapper;
-    private final EntityPatcher<E> patcher;
+    protected final CustomJpaRepository<E, Long> repository;
+    protected final BaseMapper<E, D> mapper;
+    protected final EntityPatcher<E> patcher;
 
     public BaseService(CustomJpaRepository<E, Long> repository, BaseMapper<E, D> mapper, EntityPatcher<E> patcher) {
         this.repository = repository;

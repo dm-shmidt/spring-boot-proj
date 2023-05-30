@@ -5,14 +5,11 @@ import com.test.quotation.model.entity.Customer;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Named;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
 @Mapper
 public interface CustomerMapper extends BaseMapper<Customer, CustomerDto> {
-
-    CustomerMapper INSTANCE = Mappers.getMapper(CustomerMapper.class);
 
     @Override
     Customer toEntity(CustomerDto customerDto);
