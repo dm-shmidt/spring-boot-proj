@@ -3,14 +3,12 @@ package com.test.quotation.controller;
 import com.test.quotation.model.dto.CustomerDto;
 import com.test.quotation.model.dto.QuotationDto;
 import com.test.quotation.model.dto.SubscriptionDto;
-import com.test.quotation.model.entity.Customer;
-import com.test.quotation.model.entity.Quotation;
-import com.test.quotation.model.entity.Subscription;
 import com.test.quotation.model.request.AttachRequest;
 import com.test.quotation.model.request.IdRequest;
-import com.test.quotation.service.BaseService;
+import com.test.quotation.service.CustomerService;
+import com.test.quotation.service.QuotationService;
+import com.test.quotation.service.SubscriptionService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -22,14 +20,11 @@ import java.util.Optional;
 @Transactional
 public class AppController {
 
-    private final BaseService<Customer, CustomerDto> customerService;
-    private final BaseService<Quotation, QuotationDto> quotationService;
-    private final BaseService<Subscription, SubscriptionDto> subscriptionService;
-//    private final SubscriptionService1 subscriptionService1;
+    private final CustomerService customerService;
+    private final QuotationService quotationService;
+    private final SubscriptionService subscriptionService;
 
-    public AppController(@Qualifier("customerService") BaseService<Customer, CustomerDto> customerService,
-                         @Qualifier("quotationService") BaseService<Quotation, QuotationDto> quotationService,
-                         @Qualifier("subscriptionService") BaseService<Subscription, SubscriptionDto> subscriptionService) {
+    public AppController(CustomerService customerService, QuotationService quotationService, SubscriptionService subscriptionService) {
         this.customerService = customerService;
         this.quotationService = quotationService;
         this.subscriptionService = subscriptionService;

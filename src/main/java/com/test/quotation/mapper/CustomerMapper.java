@@ -6,13 +6,12 @@ import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Mapper
 public interface CustomerMapper extends BaseMapper<Customer, CustomerDto> {
-
-    CustomerMapper INSTANCE = Mappers.getMapper(CustomerMapper.class);
 
     @Override
     Customer toEntity(CustomerDto customerDto);
