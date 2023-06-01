@@ -34,7 +34,7 @@ public class Subscription implements BaseEntity {
     @Column(name = "valid_until")
     private LocalDate validUntil;
 
-    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "quotation_id", referencedColumnName = "id")
     private Quotation quotation;
 }

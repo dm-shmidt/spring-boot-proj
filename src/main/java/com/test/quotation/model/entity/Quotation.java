@@ -44,7 +44,7 @@ public class Quotation implements BaseEntity {
     @Column(name = "date_of_signing_mortgage")
     private LocalDate dateOfSigningMortgage;
 
-    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer customer;
 
